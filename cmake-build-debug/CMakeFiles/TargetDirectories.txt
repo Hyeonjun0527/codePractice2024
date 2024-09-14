@@ -1,8 +1,0 @@
-C:/Users/osuma/CLionProjects/first/cmake-build-debug/CMakeFiles/first2_main.dir
-C:/Users/osuma/CLionProjects/first/cmake-build-debug/CMakeFiles/floyd-Warshall_main.dir
-C:/Users/osuma/CLionProjects/first/cmake-build-debug/CMakeFiles/first1_main2.dir
-C:/Users/osuma/CLionProjects/first/cmake-build-debug/CMakeFiles/shortestPath_futureCity.dir
-C:/Users/osuma/CLionProjects/first/cmake-build-debug/CMakeFiles/shortestPath_telegram.dir
-C:/Users/osuma/CLionProjects/first/cmake-build-debug/CMakeFiles/ProblemSolving_12_okunsu.dir
-C:/Users/osuma/CLionProjects/first/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/osuma/CLionProjects/first/cmake-build-debug/CMakeFiles/rebuild_cache.dir
