@@ -1,4 +1,7 @@
-#include <bits/stdc++.h>
+
+#include <cmath>
+#include <iostream>
+#include <vector>
 using namespace std;
 
 int main() {
@@ -9,24 +12,39 @@ int main() {
     //A~루트B까지의 소수를 구해.
     //소수의 제곱을 구해서 그것이 B보다 작은지 확인하면 답나와.
     //2,4,8,16,32,64....다 거의 소수야.
-    long Min, Max;
-    cin >> Min >> Max;
+
+    //1~10^7까지니까 SolArr사이즈는 10^7+1이 되어야해.
+    long min, max;
+    cin >> min >> max;
     // vector<long> arr(B_2 - A + 2);//1,2,3,4,5....remain
-    vector<long> arr(10'000'001);//1,2,3,4,5....remain
+    // constexpr int MAX_LIMIT = 10'000'000;
+    // constexpr int SIZE = MAX_LIMIT + 1; // 이거 필요가 없음
+
+    long rootMax = sqrt(max);
+    vector<long> arr_sol(rootMax + 1);//1,2,3,4,5....remain
     // vector<int> PrimePow()
-    //초기화
-    for (int i = 2; i <= 10'000'001; ++i) {
-        arr[i] = i;
+    //초기화 어차피 i=0,1일때는 0이야. 그러므로 2부터
+    for (int i = 2; i <= rootMax; ++i) {
+        arr_sol[i] = i;
     }
 
     //2,3,4,5,...로 All을 싹 돌려볼거야. 배수를 거를거야. 그렇게 소수를 구할거야.
     // i=2라면 그 All배열을
-    for(int i = 2; i <= sqrt(10'000'001); i++) {
-        if (arr[i] == 0) {
+    //왜 j = i*2부터냐면 2의 배수를 제거해야되지 근데 2는 소수야
+    //그러니 i인것 즉, 2인것은 제거하면 안돼.
+    //왜 < 아니라 <=지 이유없음
+    //sqrt는 마지막 원소에 하면 돼.
+    //왜 MAX_LIMIT이라고 물어본다면 원래는 10^14자나.
+    //일단 먼저 최대범위에 있는 모든 소수를 구하고 ,A B안에 소수의 제곱이 잇는지 확인할거야.
+    // 왜 전체구간이야? 입력값 1~2여도 1~10^7을 모두 계산해서 Arr에 소수를 밝혀냈자나. 이거 비효율적인데?
+    //맞아 비효율적이지. 만약에 입력된 Max값를 한정으로 정하고 소수를 밝혀내면 더 좋을거같아.
+    //그리고 거의 소수를 구하려면 2,3,4....,10^7의 제곱들을 전부 바라보는데 루트max까지만
+    for(int i = 2; i <= sqrt(rootMax); i++) {
+        if (arr_sol[i] == 0) {
             continue;
         }
-        for (int j = i*2; j <= 10'000'001; j = j + i) {//2 2x3 2x4 2x5다 걸러.
-            arr[j] = 0;
+        for (int j = i*2; j <= rootMax; j = j + i) {//2 2x3 2x4 2x5다 걸러.
+            arr_sol[j] = 0;
         }
     }
     // cout << "A : " << A << " B : " << B << "\n";
@@ -42,16 +60,18 @@ int main() {
     // 소수야. 소수야 근데 소수의 제곱이 Max보다
     // 2야 2야 근데 2의 제곱(4)이 Max보다 작아?
     // 그럼 2의 세제곱이 Max보다 작아? 그럼 2의 세제곱이 Max보다 작아?
+    //소수까지 살아남겼어. 이제 소수를 죽이고 거의소수만 살려도 되고, 거의소수만 count++해도되고,
+    //count하는 선택이 더 쉬워보임. 소수를 만났어. 그럼,
     int count = 0;
-    for (long i = 2; i < 10'000'001; i++) {
-        if (arr[i] != 0) {  // 소수인 경우
-            long temp = arr[i];  // 소수 값을 temp에 저장
-            while ((double)temp <= (double)Max / (double)arr[i]) {
-                if ((double)temp >= (double)Min / (double)arr[i]) {
+    for (long i = 2; i <= rootMax; i++) {
+        if (arr_sol[i] != 0) {  // 소수인 경우
+            long temp = i;  // temp=4,8,16,64가 된다. 0이 아니니까 arr[i]와 i는 완전히 같은 값이야 여기서.
+            while ((double)temp <= (double)max / (double)i) {
+                if ((double)temp >= (double)min / (double)i) {
                     count++;
                 }
-                // if (temp > Max / arr[i]) break;  // 오버플로우 없이 거듭제곱을 계산
-                temp = temp * arr[i];  // 소수의 거듭제곱 계산
+                // 오버플로우 없이 거듭제곱을 계산
+                temp *= i;  // 소수의 거듭제곱 계산
             }
         }
     }
