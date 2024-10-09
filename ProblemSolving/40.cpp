@@ -1,43 +1,67 @@
-#include <bits/stdc++.h>
+#include <iostream>     // 표준 입출력 사용을 위한 헤더
+#include <vector>       // vector 자료구조 사용을 위한 헤더
+#include <algorithm>    // fill 함수 사용을 위한 헤더
+#include <cmath>
 using namespace std;
+/*
+//2^2 3^2 4^2 로 나누어 떨어지지 않는 수 제곱 ㄴㄴ수
+//1 2 3 [4] 5 6 7 [8] [9] 10
+//pow(10,6)을 n번 반복은 괜찮아. now라고 하자. now % x^2 != 0 인 것들이 답이잖아.
+/*
+저 식에서 x를 어떻게 구하지..?
 
+501,1000이라면..?
+start는 501부터 일까?
+4로 나누는 거라면......  504부터겠지.
+500,1000이라면...?
+start는 500부터 겠지?
+4로 나누는 거라면..... 500부터겠지.
+이걸 어떻게 일반화할까? 나누어 떨어질 때 vs 나누어 떨어지지 않을때 나누면 되지 머.
+(min,max)
+
+504 508 512 516 이렇게 안될거야. power = 4 start = 504 max = 1000
+근데 테이블에 저장할건데 어떻게 저장할까? table은 min~max까지를 저장해야되지?
+table은 그럼 0~max-min+1를 저장하면 되겠다. 원래보다 -min을 했지?
+언제나 저장할때도 -min 하면 돼. 꺼내서 출력할땐 +min 하면 되고
+
+조정을 -min 했으면 저장하기전에 똑같이 -min 해주고, 출력할 땐 +min 해주면 돼.
+*/
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
-
     long long min, max;
     cin >> min >> max;
 
+
     // vector<bool> table(max - min + 1, true);
-    vector<bool> table(max - min + 1);
-    fill(table.begin(), table.end(), true);
+    vector<bool> table(max - min + 1, true);// (min부터 max+1) 조정 -min
+    //삽입, 수정, 삭제, 조회시 -min, 복원 시 +min
+    // fill(table.begin(), table.end(), true);
 
     //2제곱부터 포우까지 4 9 16 25 36 49 64 81 100
-    long long number = 2;
-    long long power = number * number;
-    while (power <= max) {
+    for (long long number = 2, power = 4;
+    power <= max;
+    number++, power = number * number) {
+        long long start;
+        //나누어 떨어진다면( min = 500 이면 start = 500)
+        //나누어 떨어지지 않는다면( min = 501 이면 start = 504)
+        if (min % power == 0) start = min;
+        else start = min / power * power + power;
 
-        long long start = min / power * power;
-        //시작을 조정함
-        if (min % power != 0) {
-            start += power;
-        }
+        // long long start = min / power * power;
+        // //시작을 조정함
+        // if (min % power != 0) {
+        //     start += power;
+        // }
 
-
-        for (long long value_now = start ;  value_now <= max ; value_now += power) {
-            table[value_now - min] = false;//value_now - min은 조정.
-        }
-
-        number++;
-        power = number * number;
+        for (long long now = start;
+            now <= max;
+            now += power) table[now - min] = false;
+        //now - min은 조정
     }
     int count = 0;
-    for ( bool i : table) {
-        if ( i ) {
-            count++;
-        }
-    }
+    for (bool isSolution : table) if (isSolution) count++;
     cout << count << '\n';
 }
 

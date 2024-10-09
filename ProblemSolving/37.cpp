@@ -9,21 +9,22 @@ int main() {
     cin >> m >> n;
     vector<int> A(n+1);//자동 0으로 초기화
 
-    for (int i = 2; i <= n; ++i) {
+    for (int i = 2; i < n+1; ++i) {
         A[i] = i;
     }
+
+    //<=sqrt(n)와 <sqrt(n)+1은 다르다...
+
     for (int i = 2; i <= sqrt(n); ++i) {
-        if (A[i] == 0) {
-            continue;
-        }
+        if (A[i] == 0) continue;
         //2면 2 4 6 8 10 12 14 16 18 20
         // j는 2 4 6 8이고 i는 2 공차 2이고 i*2부터 시작이네.
         // j는 배수들이야. A는 값과 인덱스가 같아.
-        for (int j = i*2 ; j <= n; j = j + i) {
+        for (int j = i*2 ; j <= n; j += i) {
             A[j] = 0;
         }
     }
-    while( m <= n) {
+    while (m <= n) {
         if ( A[m] != 0) {
             cout << A[m] << "\n";
         }

@@ -26,34 +26,27 @@ int main()
         if (A[i] == 0) {
             continue;
         }
-        for (int j = i + i; j < SIZE; j = j + i) { // 배수 지우기
-            A[j] = 0;
+        for (int temp = i + i; temp < SIZE; temp += i) { // 배수 지우기
+            A[temp] = 0;
         }
     }
-
-
     // N부터 1씩 증가시켜가면서 소수와 펠린드롬 수가 맞는지 확인
-    int i = N;
-    while (true) {
+    for (int i = N ;; i++) {
         if (A[i] != 0 && isPalindrome(i)) {// A[i]해도 되고 i해도 됨.
             cout << i << "\n";
             break;
         }
-        i++;
     }
-}
-//타겟을 스트링으로
-bool isPalindrome(int target) // 팰린드롬 수 판별 함수
-{
-    string temp_str = to_string(target); // 숫자를 문자열로 변환
-    int s = 0;
-    int e = temp_str.size() - 1;
 
-    while (s < e) {
-        if (temp_str[s] != temp_str[e])
+}
+
+//타겟을 스트링으로
+bool isPalindrome(int target) {// 팰린드롬 수 판별 함수
+    string str = to_string(target);// 숫자를 문자열로 변환
+    for (size_t s = 0, e = str.size() - 1; s < e; s++, e--) {
+        if (str[s] != str[e]) {
             return false;
-        s++;
-        e--;
+        }
     }
     return true;
 }

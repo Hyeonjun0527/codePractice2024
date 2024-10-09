@@ -14,18 +14,18 @@ int main() {
     //2,4,8,16,32,64....다 거의 소수야.
 
     //1~10^7까지니까 SolArr사이즈는 10^7+1이 되어야해.
-    long min, max;
+    long long min, max;
     cin >> min >> max;
     // vector<long> arr(B_2 - A + 2);//1,2,3,4,5....remain
     // constexpr int MAX_LIMIT = 10'000'000;
     // constexpr int SIZE = MAX_LIMIT + 1; // 이거 필요가 없음
 
-    long rootMax = sqrt(max);
-    vector<long> arr_sol(rootMax + 1);//1,2,3,4,5....remain
+    long rootMax = static_cast<long>(sqrt(max));
+    vector<long> A(rootMax + 1);//1,2,3,4,5....remain
     // vector<int> PrimePow()
     //초기화 어차피 i=0,1일때는 0이야. 그러므로 2부터
     for (int i = 2; i <= rootMax; ++i) {
-        arr_sol[i] = i;
+        A[i] = i;
     }
 
     //2,3,4,5,...로 All을 싹 돌려볼거야. 배수를 거를거야. 그렇게 소수를 구할거야.
@@ -40,11 +40,10 @@ int main() {
     //맞아 비효율적이지. 만약에 입력된 Max값를 한정으로 정하고 소수를 밝혀내면 더 좋을거같아.
     //그리고 거의 소수를 구하려면 2,3,4....,10^7의 제곱들을 전부 바라보는데 루트max까지만
     for(int i = 2; i <= sqrt(rootMax); i++) {
-        if (arr_sol[i] == 0) {
-            continue;
-        }
-        for (int j = i*2; j <= rootMax; j = j + i) {//2 2x3 2x4 2x5다 걸러.
-            arr_sol[j] = 0;
+        if (A[i] == 0) continue;
+
+        for (int j = i*2; j <= rootMax; j += i) {//2 2x3 2x4 2x5다 걸러.
+            A[j] = 0;
         }
     }
     // cout << "A : " << A << " B : " << B << "\n";
@@ -63,16 +62,17 @@ int main() {
     //소수까지 살아남겼어. 이제 소수를 죽이고 거의소수만 살려도 되고, 거의소수만 count++해도되고,
     //count하는 선택이 더 쉬워보임. 소수를 만났어. 그럼,
     int count = 0;
-    for (long i = 2; i <= rootMax; i++) {
-        if (arr_sol[i] != 0) {  // 소수인 경우
-            long temp = i;  // temp=4,8,16,64가 된다. 0이 아니니까 arr[i]와 i는 완전히 같은 값이야 여기서.
-            while ((double)temp <= (double)max / (double)i) {
+    for (int i = 2; i <= rootMax; i++) {
+        if (A[i] != 0) {  // 소수인 경우
+            // temp=4,8,16,32, 64가 된다. 0이 아니니까 arr[i]와 i는 완전히 같은 값이야 여기서.
+            // 소수의 거듭제곱 계산
+            //temp = 2^2 2^3 2^4 2^5 2^6
+            for (long long temp = i; (double)temp <= (double)max / i; temp *= i) {
                 if ((double)temp >= (double)min / (double)i) {
                     count++;
                 }
-                // 오버플로우 없이 거듭제곱을 계산
-                temp *= i;  // 소수의 거듭제곱 계산
             }
+
         }
     }
 
